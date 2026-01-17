@@ -1,32 +1,34 @@
 package com.example.s1_catalog
 
-import android.content.Intent
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
+class RegisterActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            RegisterScreen()
+        }
+    }
+}
 
 @Composable
-fun LoginScreen() {
-    // "משתנים" שמעדכנים את ה-UI אוטומטית
+fun RegisterScreen() {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
     var errorText by remember { mutableStateOf<String?>(null) }
-    val context = LocalContext.current
-
-
-    // משתמש קשיח
-    val hardcodedUser = "admin"
-    val hardcodedPass = "123456"
 
     Column(
         modifier = Modifier
@@ -36,7 +38,7 @@ fun LoginScreen() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Login",
+            text = "Register",
             style = MaterialTheme.typography.headlineMedium
         )
 
@@ -67,18 +69,21 @@ fun LoginScreen() {
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             modifier = Modifier.fillMaxWidth()
         )
-        Spacer(modifier = Modifier.height(16.dp))
-        TextButton(onClick = {
-            context.startActivity(Intent(context, RegisterActivity::class.java))
-        }) {
-            Text(
-                "new user? click here to register",
-                textDecoration = TextDecoration.Underline,
-                color = MaterialTheme.colorScheme.primary
-            )
-        }
 
+        Spacer(Modifier.height(12.dp))
 
+        OutlinedTextField(
+            value = confirmPassword,
+            onValueChange = {
+                confirmPassword = it
+                errorText = null
+            },
+            label = { Text("Confirm Password") },
+            singleLine = true,
+            visualTransformation = PasswordVisualTransformation(),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            modifier = Modifier.fillMaxWidth()
+        )
 
         if (errorText != null) {
             Spacer(Modifier.height(10.dp))
@@ -93,39 +98,21 @@ fun LoginScreen() {
 
         Button(
             onClick = {
-                val u = username.trim()
-                val p = password
-
-                // ולידציה בסיסית
-                if (u.isEmpty() || p.isEmpty()) {
-                    errorText = "נא למלא שם משתמש וסיסמה"
-                    return@Button
-                }
-
-                val ok = (u == hardcodedUser && p == hardcodedPass)
-                if (ok) {
-                    errorText = null
-
-                    context.startActivity(
-                        Intent(context, MainActivity::class.java).apply {
-                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or
-                                    Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        }
-                    )
+                if (password != confirmPassword) {
+                    errorText = "Passwords do not match"
                 } else {
-                    errorText = "שם משתמש או סיסמה שגויים"
+                    // TODO: Handle registration logic
                 }
-
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("התחבר")
+            Text("Register")
         }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun LoginScreenPreview() {
-    LoginScreen()
+fun RegisterScreenPreview() {
+    RegisterScreen()
 }
