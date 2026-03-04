@@ -14,7 +14,8 @@ data class CatalogItem(
     val cuisine: String,
     val address: String,
     val imageUrl: String,
-    val videoUrl: String
+    val videoUrl: String,
+    val rating: Int = 0 // Ajout du champ de notation (0 à 5)
 )
 
 object CatalogRepository {
@@ -82,16 +83,9 @@ object CatalogRepository {
         val placeholderVideo = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
 
         return listOf(
-            CatalogItem(title="BBB", description="המבורגרים וכל מה שטוב ליד. בשרים איכותיים.", kashrut="כשר", cuisine="בשרים", address="הארבעה 28, תל אביב", imageUrl="https://media.rest.co.il/Images/Interior/thumb_637848231252994968.jpg", videoUrl=placeholderVideo),
-            CatalogItem(title="קפה נמרוד", description="ארוחות בוקר מפנקות ונוף לנמל.", kashrut="מהדרין", cuisine="חלבי", address="האנגר 1, נמל תל אביב", imageUrl="https://media.rest.co.il/Images/Interior/thumb_637848243300089255.jpg", videoUrl=placeholderVideo),
-            CatalogItem(title="ג'ירף", description="אוכל אסייתי מגוון, נודלס וסושי.", kashrut="ללא תעודה", cuisine="אסייתי", address="אבן גבירול 49, תל אביב", imageUrl="https://media.rest.co.il/Images/Interior/thumb_637848218670868195.jpg", videoUrl=placeholderVideo),
-            CatalogItem(title="M25", description="בשרים איכותיים היישר מהקצב ליד שוק הכרמל.", kashrut="כשר", cuisine="בשרים", address="שוק הכרמל 30, תל אביב", imageUrl="https://media.rest.co.il/Images/Interior/thumb_637848234858972848.jpg", videoUrl=placeholderVideo),
-            CatalogItem(title="La Lasagneria", description="לזניות אמיתיות בעבודת יד, ממש כמו באיטליה.", kashrut="מהדרין", cuisine="איטלקי", address="דיזנגוף 187, תל אביב", imageUrl="https://media.rest.co.il/Images/Interior/thumb_637848227096645396.jpg", videoUrl=placeholderVideo),
-            CatalogItem(title="Taizu", description="פיוז'ן אסייתי יוקרתי עם מנות מחמישה מטבחים.", kashrut="ללא תעודה", cuisine="אסייתי", address="מנחם בגין 23, תל אביב", imageUrl="https://media.rest.co.il/Images/Interior/thumb_637848253459146059.jpg", videoUrl=placeholderVideo),
-            CatalogItem(title="Pankina", description="מסעדה איטלקית חלבית עם אווירה ביתית.", kashrut="כשר", cuisine="איטלקי", address="גורדון 39, תל אביב", imageUrl="https://media.rest.co.il/Images/Interior/thumb_637848240590488273.jpg", videoUrl=placeholderVideo),
-            CatalogItem(title="ויטרינה", description="ההמבורגר והנקניקיות המפורסמים ביותר בעיר.", kashrut="ללא תעודה", cuisine="בשרים", address="אבן גבירול 54, תל אביב", imageUrl="https://media.rest.co.il/Images/Interior/thumb_637848256333903126.jpg", videoUrl=placeholderVideo),
-            CatalogItem(title="Machneyuda", description="מסעדת שוק סואנת ותוססת בלב ירושלים.", kashrut="כשר", cuisine="בשרים", address="בית יעקב 10, ירושלים", imageUrl="https://media.rest.co.il/Images/Interior/thumb_637848233301077759.jpg", videoUrl=placeholderVideo),
-            CatalogItem(title="TYO", description="סושי בר יוקרתי עם קוקטיילים מיוחדים.", kashrut="כשר", cuisine="יפני", address="מונטיפיורי 7, תל אביב", imageUrl="https://media.rest.co.il/Images/Interior/thumb_637848254558597370.jpg", videoUrl=placeholderVideo)
+            CatalogItem(title="BBB", description="המבורגרים וכל מה שטוב ליד. בשרים איכותיים.", kashrut="כשר", cuisine="בשרים", address="הארבעה 28, תל אביב", imageUrl="https://media.rest.co.il/Images/Interior/thumb_637848231252994968.jpg", videoUrl=placeholderVideo, rating = 4),
+            CatalogItem(title="קפה נמרוד", description="ארוחות בוקר מפנקות ונוף לנמל.", kashrut="מהדרין", cuisine="חלבי", address="האנגר 1, נמל תל אביב", imageUrl="https://media.rest.co.il/Images/Interior/thumb_637848243300089255.jpg", videoUrl=placeholderVideo, rating = 5),
+            CatalogItem(title="ג'ירף", description="אוכל אסייתי מגוון, נודלס וסושי.", kashrut="ללא תעודה", cuisine="אסייתי", address="אבן גבירול 49, תל אביב", imageUrl="https://media.rest.co.il/Images/Interior/thumb_637848218670868195.jpg", videoUrl=placeholderVideo, rating = 3)
         )
     }
 }
