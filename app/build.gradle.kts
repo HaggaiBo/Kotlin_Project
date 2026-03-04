@@ -60,11 +60,14 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
 
-    // 1. Remplacement de Coil par Glide pour Compose
+    // Glide pour les images
     implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
 
-    // Gson pour la sauvegarde des données
+    // Gson pour la sauvegarde
     implementation("com.google.code.gson:gson:2.10.1")
+
+    // Google Places API (C'était la dépendance manquante)
+    implementation("com.google.android.libraries.places:places:3.5.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

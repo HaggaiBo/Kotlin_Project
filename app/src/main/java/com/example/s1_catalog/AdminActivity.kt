@@ -6,12 +6,19 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -25,10 +32,10 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.ui.graphics.Color
 
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
@@ -55,6 +62,7 @@ fun AdminScreen(itemId: String?, onSaveComplete: () -> Unit) {
     var address by remember { mutableStateOf("") }
     var videoUrl by remember { mutableStateOf("") }
     var imageUrl by remember { mutableStateOf("") }
+    var rating by remember { mutableIntStateOf(0) }
 
     val context = LocalContext.current
 
@@ -78,6 +86,7 @@ fun AdminScreen(itemId: String?, onSaveComplete: () -> Unit) {
                 selectedKashrut = item.kashrut
                 selectedCuisine = item.cuisine
                 imageUrl = item.imageUrl
+                rating = item.rating
             }
         }
     }
@@ -96,7 +105,14 @@ fun AdminScreen(itemId: String?, onSaveComplete: () -> Unit) {
 
         Spacer(Modifier.height(24.dp))
 
-        OutlinedTextField(value = title, onValueChange = { title = it }, label = { Text("שם של המסעדה") }, singleLine = true, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(
+            value = title, 
+            onValueChange = { title = it }, 
+            label = { Text("שם של המסעדה") }, 
+            singleLine = true, 
+            modifier = Modifier.fillMaxWidth()
+        )
+
         Spacer(Modifier.height(12.dp))
         OutlinedTextField(value = description, onValueChange = { description = it }, label = { Text("תיאור") }, modifier = Modifier.fillMaxWidth().defaultMinSize(minHeight = 100.dp))
         Spacer(Modifier.height(12.dp))
@@ -109,13 +125,19 @@ fun AdminScreen(itemId: String?, onSaveComplete: () -> Unit) {
         AdminKashrutDropdown(kashrutOptions = kashrutOptions, selected = selectedKashrut, onSelected = { selectedKashrut = it })
         Spacer(Modifier.height(12.dp))
         AdminCuisineDropdown(cuisineOptions = cuisineOptions, selected = selectedCuisine, onSelected = { selectedCuisine = it })
+        
+        Spacer(Modifier.height(16.dp))
+        
+        Text("דירוג המסעדה:", style = MaterialTheme.typography.titleMedium)
+        RatingPicker(rating = rating, onRatingSelected = { rating = it })
+
         Spacer(Modifier.height(16.dp))
 
         if (imageUrl.isNotBlank()) {
             GlideImage(model = imageUrl, contentDescription = null, modifier = Modifier.size(150.dp).padding(4.dp))
         }
 
-        Spacer(Modifier.weight(1f))
+        Spacer(Modifier.height(24.dp))
 
         Row(Modifier.fillMaxWidth()) {
             Button(
@@ -126,10 +148,10 @@ fun AdminScreen(itemId: String?, onSaveComplete: () -> Unit) {
                     }
 
                     if (itemId != null) {
-                        val updatedItem = CatalogItem(id = itemId, title = title, description = description, kashrut = selectedKashrut, cuisine = selectedCuisine, address = address, imageUrl = imageUrl, videoUrl = videoUrl)
+                        val updatedItem = CatalogItem(id = itemId, title = title, description = description, kashrut = selectedKashrut, cuisine = selectedCuisine, address = address, imageUrl = imageUrl, videoUrl = videoUrl, rating = rating)
                         CatalogRepository.updateItem(context, updatedItem)
                     } else {
-                        val newItem = CatalogItem(title = title, description = description, kashrut = selectedKashrut, cuisine = selectedCuisine, address = address, imageUrl = imageUrl, videoUrl = videoUrl)
+                        val newItem = CatalogItem(title = title, description = description, kashrut = selectedKashrut, cuisine = selectedCuisine, address = address, imageUrl = imageUrl, videoUrl = videoUrl, rating = rating)
                         CatalogRepository.addItem(context, newItem)
                     }
 
@@ -153,6 +175,23 @@ fun AdminScreen(itemId: String?, onSaveComplete: () -> Unit) {
                     Text("מחק פריט")
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun RatingPicker(rating: Int, onRatingSelected: (Int) -> Unit) {
+    Row {
+        repeat(5) { index ->
+            val starIndex = index + 1
+            Icon(
+                imageVector = if (starIndex <= rating) Icons.Default.Star else Icons.Outlined.StarOutline,
+                contentDescription = null,
+                tint = if (starIndex <= rating) Color(0xFFFFD700) else Color.Gray,
+                modifier = Modifier
+                    .size(40.dp)
+                    .clickable { onRatingSelected(starIndex) }
+            )
         }
     }
 }
@@ -188,5 +227,5 @@ fun AdminCuisineDropdown(cuisineOptions: List<String>, selected: String, onSelec
 @Preview(showBackground = true)
 @Composable
 fun AdminScreenPreview() {
-    AdminScreen(itemId = "some-id", onSaveComplete = {})
+    AdminScreen(itemId = null, onSaveComplete = {})
 }
