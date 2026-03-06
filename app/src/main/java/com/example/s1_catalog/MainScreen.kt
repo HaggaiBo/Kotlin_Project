@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.runtime.*
@@ -24,6 +25,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -61,16 +63,33 @@ fun MainScreen(modifier: Modifier = Modifier) {
             .fillMaxSize()
             .padding(12.dp)
     ) {
-        Text(
-            text = "Missada On Your Way",
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 52.dp),
-            textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.primary,
-            fontWeight = FontWeight.ExtraBold,
+        // En-tête avec titre et avatar
+        Box(modifier = Modifier.fillMaxWidth()) {
+            Text(
+                text = "Missada On Your Way",
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 52.dp),
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.ExtraBold,
             )
+            
+            IconButton(
+                onClick = { context.startActivity(Intent(context, ProfileActivity::class.java)) },
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(top = 48.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.AccountCircle,
+                    contentDescription = "Profile",
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(40.dp)
+                )
+            }
+        }
 
         Spacer(Modifier.height(12.dp))
 
@@ -155,7 +174,6 @@ private fun RestaurantCard(
                 Text(item.description, maxLines = 2)
                 Spacer(Modifier.height(4.dp))
                 
-                // Affichage de la note par étoiles
                 RatingBar(rating = item.rating)
                 
                 Spacer(Modifier.height(4.dp))
