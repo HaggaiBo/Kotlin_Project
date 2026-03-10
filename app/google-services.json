@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "753583643204",
+    "project_id": "kosher-restaurant",
+    "storage_bucket": "kosher-restaurant.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:753583643204:android:63626050fde496d5c3ba11",
+        "android_client_info": {
+          "package_name": "com.example.s1_catalog"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9zG1B3xvC8xR1j0SOtD1_dAfP08mWcm8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,13 +1,9 @@
-package com.example.s1_catalog
+package com.example.s1_catalog.controller
 
-import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -22,9 +18,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import java.io.File
-import java.text.SimpleDateFormat
-import java.util.*
 
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -39,6 +32,8 @@ import androidx.compose.material3.Text
 
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import com.example.s1_catalog.model.CatalogItem
+import com.example.s1_catalog.model.CatalogRepository
 
 class AdminActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -148,11 +143,30 @@ fun AdminScreen(itemId: String?, onSaveComplete: () -> Unit) {
                     }
 
                     if (itemId != null) {
-                        val updatedItem = CatalogItem(id = itemId, title = title, description = description, kashrut = selectedKashrut, cuisine = selectedCuisine, address = address, imageUrl = imageUrl, videoUrl = videoUrl, rating = rating)
+                        val updatedItem = CatalogItem(
+                            id = itemId,
+                            title = title,
+                            description = description,
+                            kashrut = selectedKashrut,
+                            cuisine = selectedCuisine,
+                            address = address,
+                            imageUrl = imageUrl,
+                            videoUrl = videoUrl,
+                            rating = rating
+                        )
                         CatalogRepository.updateItem(context, updatedItem)
                     } else {
-                        val newItem = CatalogItem(title = title, description = description, kashrut = selectedKashrut, cuisine = selectedCuisine, address = address, imageUrl = imageUrl, videoUrl = videoUrl, rating = rating)
-                        CatalogRepository.addItem(context, newItem)
+                        val newItem = CatalogItem(
+                            title = title,
+                            description = description,
+                            kashrut = selectedKashrut,
+                            cuisine = selectedCuisine,
+                            address = address,
+                            imageUrl = imageUrl,
+                            videoUrl = videoUrl,
+                            rating = rating
+                        )
+                        CatalogRepository.addItem( newItem)
                     }
 
                     onSaveComplete()

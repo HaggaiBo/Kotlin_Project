@@ -1,4 +1,4 @@
-package com.example.s1_catalog
+package com.example.s1_catalog.controller
 
 import android.os.Bundle
 import android.widget.Toast
@@ -11,6 +11,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.example.s1_catalog.model.UserData
+import com.example.s1_catalog.model.UserRepository
 
 class ProfileActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,12 +26,11 @@ class ProfileActivity : ComponentActivity() {
 @Composable
 fun ProfileScreen(onBack: () -> Unit) {
     val context = LocalContext.current
-    val currentProfile = UserProfileRepository.userProfile
+    val currentUser = UserRepository.currentUser
     
-    // Valeurs initiales chargées depuis le dépôt
-    var name by remember { mutableStateOf(currentProfile.name) }
-    var email by remember { mutableStateOf(currentProfile.email) }
-    var phone by remember { mutableStateOf(currentProfile.phone) }
+    var name by remember(currentUser.name) { mutableStateOf(currentUser.name) }
+    var email by remember(currentUser.email) { mutableStateOf(currentUser.email) }
+    var phone by remember(currentUser.phone) { mutableStateOf(currentUser.phone) }
 
     Column(
         modifier = Modifier
@@ -46,7 +47,6 @@ fun ProfileScreen(onBack: () -> Unit) {
             value = name,
             onValueChange = { name = it },
             label = { Text("Name") },
-            placeholder = { Text(if (currentProfile.name.isEmpty()) "Enter your name" else currentProfile.name) },
             modifier = Modifier.fillMaxWidth()
         )
         
@@ -56,7 +56,6 @@ fun ProfileScreen(onBack: () -> Unit) {
             value = email,
             onValueChange = { email = it },
             label = { Text("Email") },
-            placeholder = { Text(if (currentProfile.email.isEmpty()) "Enter your email" else currentProfile.email) },
             modifier = Modifier.fillMaxWidth()
         )
         
@@ -66,7 +65,6 @@ fun ProfileScreen(onBack: () -> Unit) {
             value = phone,
             onValueChange = { phone = it },
             label = { Text("Phone") },
-            placeholder = { Text(if (currentProfile.phone.isEmpty()) "Enter your phone" else currentProfile.phone) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -74,7 +72,12 @@ fun ProfileScreen(onBack: () -> Unit) {
 
         Button(
             onClick = {
-                UserProfileRepository.saveProfile(context, UserProfile(name, email, phone))
+                val updatedUser = currentUser.copy(
+                    name = name,
+                    email = email,
+                    phone = phone
+                )
+                UserRepository.saveUser(updatedUser)
                 Toast.makeText(context, "Profile Saved", Toast.LENGTH_SHORT).show()
                 onBack()
             },
