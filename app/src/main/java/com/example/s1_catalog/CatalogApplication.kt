@@ -1,12 +1,14 @@
 package com.example.s1_catalog
 
 import android.app.Application
+import com.example.s1_catalog.model.CatalogRepository
+import com.example.s1_catalog.model.UserRepository
 
 class CatalogApplication : Application() {
     override fun onCreate() {
         super.onCreate()
-        // Initialiser les référentiels avec le contexte de l'application
+        // Initialize repositories
         CatalogRepository.init(this)
-        UserProfileRepository.init(this)
+        UserRepository.init() // Default user for now
     }
 }

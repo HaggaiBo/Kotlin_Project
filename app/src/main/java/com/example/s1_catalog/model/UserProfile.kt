@@ -1,4 +1,4 @@
-package com.example.s1_catalog
+package com.example.s1_catalog.model
 
 import android.content.Context
 import androidx.compose.runtime.getValue

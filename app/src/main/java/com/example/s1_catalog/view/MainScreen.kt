@@ -1,14 +1,14 @@
-package com.example.s1_catalog
+package com.example.s1_catalog.view
 
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.runtime.*
@@ -32,10 +32,20 @@ import androidx.compose.material3.Text
 
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import com.example.s1_catalog.controller.AdminActivity
+import com.example.s1_catalog.controller.ProfileActivity
+import com.example.s1_catalog.model.CatalogItem
+import com.example.s1_catalog.model.CatalogRepository
 
 @Composable
 fun MainScreen(modifier: Modifier = Modifier) {
     val context = LocalContext.current
+    
+    // Initialisation du référentiel si nécessaire
+    LaunchedEffect(Unit) {
+        CatalogRepository.init(context)
+    }
+
     val allItems = CatalogRepository.getItems()
 
     var searchQuery by remember { mutableStateOf("") }
@@ -170,8 +180,26 @@ private fun RestaurantCard(
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(item.title, style = MaterialTheme.typography.titleMedium)
+                
                 Spacer(Modifier.height(2.dp))
-                Text(item.description, maxLines = 2)
+                
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Default.LocationOn,
+                        contentDescription = null,
+                        modifier = Modifier.size(14.dp),
+                        tint = Color.Gray
+                    )
+                    Text(
+                        text = item.address,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color.Gray
+                    )
+                }
+
+                Spacer(Modifier.height(2.dp))
+                Text(item.description, maxLines = 2, style = MaterialTheme.typography.bodyMedium)
+                
                 Spacer(Modifier.height(4.dp))
                 
                 RatingBar(rating = item.rating)
@@ -179,13 +207,13 @@ private fun RestaurantCard(
                 Spacer(Modifier.height(4.dp))
                 Row {
                     Text(
-                        text = item.kashrut,
-                        style = MaterialTheme.typography.labelMedium,
+                        text = "כשרות: ${item.kashrut}",
+                        style = MaterialTheme.typography.labelSmall,
                         modifier = Modifier.padding(end = 8.dp)
                     )
                     Text(
-                        text = item.cuisine,
-                        style = MaterialTheme.typography.labelMedium
+                        text = "מטבח: ${item.cuisine}",
+                        style = MaterialTheme.typography.labelSmall
                     )
                 }
             }

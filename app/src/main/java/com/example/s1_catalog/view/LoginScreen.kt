@@ -1,4 +1,4 @@
-package com.example.s1_catalog
+package com.example.s1_catalog.view
 
 import android.content.Intent
 import androidx.compose.foundation.layout.*
@@ -13,20 +13,18 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.s1_catalog.controller.MainActivity
+import com.example.s1_catalog.controller.RegisterActivity
+import com.example.s1_catalog.model.UserRepository
 
 
 @Composable
 fun LoginScreen() {
-    // "משתנים" שמעדכנים את ה-UI אוטומטית
-    var username by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var errorText by remember { mutableStateOf<String?>(null) }
+    var isLoading by remember { mutableStateOf(false) }
     val context = LocalContext.current
-
-
-    // משתמש קשיח
-    val hardcodedUser = "admin"
-    val hardcodedPass = "123456"
 
     Column(
         modifier = Modifier
@@ -43,14 +41,15 @@ fun LoginScreen() {
         Spacer(Modifier.height(24.dp))
 
         OutlinedTextField(
-            value = username,
+            value = email,
             onValueChange = {
-                username = it
+                email = it
                 errorText = null
             },
-            label = { Text("Username") },
+            label = { Text("Email") },
             singleLine = true,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !isLoading
         )
 
         Spacer(Modifier.height(12.dp))
@@ -65,20 +64,24 @@ fun LoginScreen() {
             singleLine = true,
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !isLoading
         )
+        
         Spacer(modifier = Modifier.height(16.dp))
-        TextButton(onClick = {
-            context.startActivity(Intent(context, RegisterActivity::class.java))
-        }) {
+        
+        TextButton(
+            onClick = {
+                context.startActivity(Intent(context, RegisterActivity::class.java))
+            },
+            enabled = !isLoading
+        ) {
             Text(
                 "new user? click here to register",
                 textDecoration = TextDecoration.Underline,
                 color = MaterialTheme.colorScheme.primary
             )
         }
-
-
 
         if (errorText != null) {
             Spacer(Modifier.height(10.dp))
@@ -91,35 +94,40 @@ fun LoginScreen() {
 
         Spacer(Modifier.height(16.dp))
 
-        Button(
-            onClick = {
-                val u = username.trim()
-                val p = password
+        if (isLoading) {
+            CircularProgressIndicator()
+        } else {
+            Button(
+                onClick = {
+                    val e = email.trim()
+                    val p = password
 
-                // ולידציה בסיסית
-                if (u.isEmpty() || p.isEmpty()) {
-                    errorText = "נא למלא שם משתמש וסיסמה"
-                    return@Button
-                }
+                    if (e.isEmpty() || p.isEmpty()) {
+                        errorText = "נא למלא אימייל וסיסמה"
+                        return@Button
+                    }
 
-                val ok = (u == hardcodedUser && p == hardcodedPass)
-                if (ok) {
-                    errorText = null
-
-                    context.startActivity(
-                        Intent(context, MainActivity::class.java).apply {
-                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or
-                                    Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    isLoading = true
+                    UserRepository.findUserByEmail(e) { user ->
+                        isLoading = false
+                        if (user != null && user.password == p) {
+                            errorText = null
+                            UserRepository.init(user.id)
+                            context.startActivity(
+                                Intent(context, MainActivity::class.java).apply {
+                                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or
+                                            Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                }
+                            )
+                        } else {
+                            errorText = "אימייל או סיסמה שגויים"
                         }
-                    )
-                } else {
-                    errorText = "שם משתמש או סיסמה שגויים"
-                }
-
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("התחבר")
+                    }
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("התחבר")
+            }
         }
     }
 }
