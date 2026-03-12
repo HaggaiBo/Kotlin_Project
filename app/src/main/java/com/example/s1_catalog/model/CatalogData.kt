@@ -16,6 +16,7 @@ data class CatalogItem(
     val address: String = "",
     val imageUrl: String = "",
     val videoUrl: String = "",
+    val id_updater: String = "",
     val rating: Int = 0
 )
 
