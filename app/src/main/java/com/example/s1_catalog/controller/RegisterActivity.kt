@@ -155,7 +155,7 @@ fun RegisterScreen(onRegisterSuccess: () -> Unit) {
                     UserRepository.findUserByEmail(e) { existingUser ->
                         if (existingUser != null) {
                             isLoading = false
-                            errorText = "האימייל כבר קיים במערכת"
+                            errorText = "This Email Already Exists"
                         } else {
                             val newUser = UserData(
                                 name = n,
