@@ -9,6 +9,7 @@ import android.util.Log
 
 data class UserData(
     val id: String = "",
+    val role: String = "user",
     val name: String = "",
     val email: String = "",
     val phone: String = "",
