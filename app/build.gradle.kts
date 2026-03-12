@@ -67,8 +67,12 @@ dependencies {
     // Gson pour la sauvegarde
     implementation("com.google.code.gson:gson:2.10.1")
 
-    // Google Places API (C'était la dépendance manquante)
+    // Google Places API
     implementation("com.google.android.libraries.places:places:3.5.0")
+
+    // Google Maps for Compose
+    implementation("com.google.maps.android:maps-compose:4.4.1")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -81,13 +85,6 @@ dependencies {
     // Import the Firebase BoM
     implementation(platform("com.google.firebase:firebase-bom:34.10.0"))
 
-
-    // TODO: Add the dependencies for Firebase products you want to use
-    // When using the BoM, don't specify versions in Firebase dependencies
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-firestore")
-
-
-    // Add the dependencies for any other desired Firebase products
-    // https://firebase.google.com/docs/android/setup#available-libraries
 }

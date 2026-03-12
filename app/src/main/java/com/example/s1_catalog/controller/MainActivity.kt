@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
                         FloatingActionButton(onClick = {
                             startActivity(Intent(this, AdminActivity::class.java))
                         }) {
-                            Icon(Icons.Default.Add, contentDescription = "Add item")
+                            Icon(Icons.Default.Add, contentDescription = "Add Item")
                         }
                     }
                 ) { innerPadding ->

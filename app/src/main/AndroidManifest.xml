@@ -2,8 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- 1. Ajout de la permission Internet -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" />
 
@@ -17,6 +18,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.S1Catalog">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDmkpBaJteIANJUj7SUWIIxT2Dl2BZbn68" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -41,13 +46,15 @@
             android:name=".controller.ProfileActivity"
             android:exported="false" />
         <activity
+            android:name=".controller.MapActivity"
+            android:exported="false" />
+        <activity
             android:name=".controller.LoginActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.S1Catalog">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
