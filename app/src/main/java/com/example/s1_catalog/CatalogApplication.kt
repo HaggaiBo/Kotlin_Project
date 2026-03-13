@@ -9,6 +9,6 @@ class CatalogApplication : Application() {
         super.onCreate()
         // Initialize repositories
         CatalogRepository.init(this)
-        UserRepository.init() // Default user for now
+        UserRepository.init(this)
     }
 }

@@ -1,5 +1,6 @@
 package com.example.s1_catalog.model
 
+import android.content.Context
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -19,14 +20,43 @@ data class UserData(
 object UserRepository {
     private val db by lazy { Firebase.firestore }
     private const val COLLECTION_NAME = "Users"
+    private const val PREFS_NAME = "UserPrefs"
+    private const val KEY_USER_ID = "logged_user_id"
 
     var currentUser by mutableStateOf(UserData())
         private set
 
-    fun init(userId: String = "") {
-        if (userId.isNotEmpty()) {
-            listenToUserChanges(userId)
+    fun init(context: Context, userId: String = "") {
+        var idToUse = userId
+        
+        if (idToUse.isEmpty()) {
+            val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            idToUse = prefs.getString(KEY_USER_ID, "") ?: ""
         }
+        
+        if (idToUse.isNotEmpty()) {
+            listenToUserChanges(idToUse)
+        }
+    }
+
+    fun setStayConnected(context: Context, userId: String, enabled: Boolean) {
+        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        if (enabled) {
+            prefs.edit().putString(KEY_USER_ID, userId).apply()
+        } else {
+            prefs.edit().remove(KEY_USER_ID).apply()
+        }
+    }
+
+    fun isUserLoggedIn(context: Context): Boolean {
+        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        return prefs.getString(KEY_USER_ID, "")?.isNotEmpty() == true
+    }
+
+    fun logout(context: Context) {
+        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        prefs.edit().remove(KEY_USER_ID).apply()
+        currentUser = UserData()
     }
 
     private fun listenToUserChanges(userId: String) {

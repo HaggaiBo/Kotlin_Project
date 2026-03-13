@@ -1,6 +1,7 @@
 package com.example.s1_catalog.view
 
 import android.content.Intent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
@@ -22,6 +23,7 @@ import com.example.s1_catalog.model.UserRepository
 fun LoginScreen() {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var stayConnected by remember { mutableStateOf(false) }
     var errorText by remember { mutableStateOf<String?>(null) }
     var isLoading by remember { mutableStateOf(false) }
     val context = LocalContext.current
@@ -68,6 +70,23 @@ fun LoginScreen() {
             enabled = !isLoading
         )
         
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Checkbox(
+                checked = stayConnected,
+                onCheckedChange = { stayConnected = it },
+                enabled = !isLoading
+            )
+            Text(
+                text = "תשאיר אותי מחובר",
+                modifier = Modifier.clickable { stayConnected = !stayConnected }
+            )
+        }
+
         Spacer(modifier = Modifier.height(16.dp))
         
         TextButton(
@@ -112,7 +131,8 @@ fun LoginScreen() {
                         isLoading = false
                         if (user != null && user.password == p) {
                             errorText = null
-                            UserRepository.init(user.id)
+                            UserRepository.setStayConnected(context, user.id, stayConnected)
+                            UserRepository.init(context, user.id)
                             context.startActivity(
                                 Intent(context, MainActivity::class.java).apply {
                                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or

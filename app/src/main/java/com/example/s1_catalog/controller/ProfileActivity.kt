@@ -1,5 +1,6 @@
 package com.example.s1_catalog.controller
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -9,6 +10,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.s1_catalog.model.UserData
@@ -86,6 +88,24 @@ fun ProfileScreen(onBack: () -> Unit) {
             Text("Save Profile")
         }
         
+        Spacer(Modifier.height(8.dp))
+
+        Button(
+            onClick = {
+                UserRepository.logout(context)
+                val intent = Intent(context, LoginActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                context.startActivity(intent)
+            },
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Logout", color = Color.White)
+        }
+        
+        Spacer(Modifier.height(8.dp))
+
         TextButton(onClick = onBack) {
             Text("Cancel")
         }
